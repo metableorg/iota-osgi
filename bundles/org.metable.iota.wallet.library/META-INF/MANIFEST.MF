@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IOTA Wallet Library
+Bundle-SymbolicName: org.metable.iota.wallet.library;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: org.metable.iota.wallet.library
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-ClassPath: .,
+ native.jar
+Export-Package: org.iota.wallet,
+ org.iota.wallet.local
+Import-Package: org.osgi.framework
+Bundle-Activator: org.metable.iota.wallet.library.Activator
+Bundle-ActivationPolicy: lazy
