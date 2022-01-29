@@ -1,1 +1,0 @@
-Examples based on Java bindings example in <https://github.com/iotaledger/iota.rs.git>
