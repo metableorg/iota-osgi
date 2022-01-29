@@ -1,9 +1,12 @@
 package org.iota.example;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.iota.client.BalanceAddressResponse;
 import org.iota.client.Client;
@@ -124,25 +127,36 @@ public class Example {
         System.out.printf("Message ID: %s", message.id());
     }
 
-    public static void generateAddresses() {
+    public static String[] generateAddresses(final String seed) {
         Client iota = node();
-
-        String seed = DevelopmentSeed.SEED_1;
         String[] addresses = new GetAddressesBuilder(seed).withClient(iota).withRange(0, 10).finish();
-        // String[] addresses = new GetAddressesBuilder(seed).withClient(iota).withRange(0, 1).finish();
-        System.out.println(Arrays.toString(addresses));
+        return addresses;
+    }
+    
+    public static void generateSeedAndAddresses(final String pathToPropertiesFile) throws IOException {
+        final String seed = generateSeed(); 
+        String[] addresses = generateAddresses(seed); 
+
+        Properties properties = new Properties();
+        
+        properties.put("seed", seed);
+
+        for (int i = 0; i < addresses.length; ++i) {
+            properties.put("address_" + i, addresses[i]);
+        }
+
+        FileOutputStream fos = new FileOutputStream(pathToPropertiesFile);
+        properties.store(fos, "IOTA test data");
+        fos.close();
     }
 
-    public static void generateSeed() {
+    public static String generateSeed() {
         SecretKey secret_key = SecretKey.generate();
-        System.out.println(RustHex.encode(secret_key.toBytes()));
+        return RustHex.encode(secret_key.toBytes());
     }
 
-    public static void getBalanceBySeed() {
+    public static void getBalanceBySeed(final String seed) {
         Client iota = node();
-
-        final String seed = DevelopmentSeed.SEED_1;
-
         long seed_balance = iota.getBalance(seed).finish();
         System.out.println("Account balance: " + seed_balance);
     }
