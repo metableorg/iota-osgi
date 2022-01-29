@@ -1,8 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Examples
-Bundle-SymbolicName: org.metable.iot.client.examples
+Bundle-SymbolicName: org.metable.iota.client.examples;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: org.metable.iot.client.examples
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.metable.iota.client.library
+Bundle-Activator: org.iota.example.Activator
+Import-Package: org.osgi.framework
