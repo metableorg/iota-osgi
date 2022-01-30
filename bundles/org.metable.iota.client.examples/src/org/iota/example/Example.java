@@ -2,11 +2,13 @@ package org.iota.example;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import org.iota.client.BalanceAddressResponse;
 import org.iota.client.Client;
@@ -132,13 +134,18 @@ public class Example {
         String[] addresses = new GetAddressesBuilder(seed).withClient(iota).withRange(0, 10).finish();
         return addresses;
     }
-    
+
+    public static String generateSeed() {
+        SecretKey secret_key = SecretKey.generate();
+        return RustHex.encode(secret_key.toBytes());
+    }
+
     public static void generateSeedAndAddresses(final String pathToPropertiesFile) throws IOException {
-        final String seed = generateSeed(); 
-        String[] addresses = generateAddresses(seed); 
+        final String seed = generateSeed();
+        String[] addresses = generateAddresses(seed);
 
         Properties properties = new Properties();
-        
+
         properties.put("seed", seed);
 
         for (int i = 0; i < addresses.length; ++i) {
@@ -148,27 +155,6 @@ public class Example {
         FileOutputStream fos = new FileOutputStream(pathToPropertiesFile);
         properties.store(fos, "IOTA test data");
         fos.close();
-    }
-
-    public static String generateSeed() {
-        SecretKey secret_key = SecretKey.generate();
-        return RustHex.encode(secret_key.toBytes());
-    }
-
-    public static void getBalanceBySeed(final String seed) {
-        Client iota = node();
-        long seed_balance = iota.getBalance(seed).finish();
-        System.out.println("Account balance: " + seed_balance);
-    }
-
-    public static void getBalanceByAddress(final String address) {
-        Client iota = node();
-
-        BalanceAddressResponse response = iota.getAddress().balance(address);
-        System.out.println("The balance of " + address + " is " + response.balance());
-
-        UtxoInput[] outputs = iota.getAddress().outputs(address, new OutputsOptions());
-        System.out.println("The outputs of address " + address + " are: " + Arrays.toString(outputs));
     }
 
     public static void getBalance() {
@@ -186,6 +172,22 @@ public class Example {
 
         UtxoInput[] outputs = iota.getAddress().outputs(address, new OutputsOptions());
         System.out.println("The outputs of address " + address + " are: " + Arrays.toString(outputs));
+    }
+
+    public static void getBalanceByAddress(final String address) {
+        Client iota = node();
+
+        BalanceAddressResponse response = iota.getAddress().balance(address);
+        System.out.println("The balance of " + address + " is " + response.balance());
+
+        UtxoInput[] outputs = iota.getAddress().outputs(address, new OutputsOptions());
+        System.out.println("The outputs of address " + address + " are: " + Arrays.toString(outputs));
+    }
+
+    public static void getBalanceBySeed(final String seed) {
+        Client iota = node();
+        long seed_balance = iota.getBalance(seed).finish();
+        System.out.println("Account balance: " + seed_balance);
     }
 
     public static void getDataMessage() {
@@ -215,6 +217,20 @@ public class Example {
 
         UtxoInput[] outputs = iota.getAddress().outputs(address, new OutputsOptions());
         System.out.println("The outputs of address " + address + " are: " + Arrays.toString(outputs));
+    }
+
+    public static List<String> getValues(final String key) {
+        Client iota = node();
+
+        final MessageId[] messageIds = iota.getMessage().indexString(key);
+
+        return Arrays.stream(messageIds).map(id -> {
+            try {
+                return new String(iota.getMessage().data(id).payload().get().getAsIndexation().get().data(), "UTF-8");
+            } catch (RuntimeException | UnsupportedEncodingException e) {
+                return e.getMessage();
+            }
+        }).collect(Collectors.toList());
     }
 
     @SuppressWarnings("unused")
@@ -273,6 +289,12 @@ public class Example {
         Message message = iota.message().finish();
 
         System.out.println("Empty message sent: " + URL + message.id().toString());
+    }
+
+    public static void storeValue(final String key, final String value) {
+        Client iota = node();
+
+        iota.message().withIndexString(key).withDataString(value).finish();
     }
 
     public static void transaction() {
