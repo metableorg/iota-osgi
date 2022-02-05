@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: X86_64
+Bundle-SymbolicName: org.metable.iota.wallet.library.win32.x86_64
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.metable.iota.wallet.library;bundle-version="1.0.0"
+Automatic-Module-Name: org.metable.iota.wallet.library.win32.x86.64
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-ClassPath: .
