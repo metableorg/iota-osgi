@@ -1,5 +1,4 @@
 # iota-osgi
-IOTA OSGi
 Build OSGi bundles that expose the IOTA client and wallet APIs.
 
 # Build Java Bindings
