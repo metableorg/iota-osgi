@@ -1,5 +1,5 @@
 # iota-osgi
-Build OSGi bundles that expose the IOTA client and wallet APIs.
+Build OSGi bundles that export the IOTA client and wallet APIs.
 
 # Build Java Bindings
 1. Clone https://github.com/iotaledger/iota.rs.git
