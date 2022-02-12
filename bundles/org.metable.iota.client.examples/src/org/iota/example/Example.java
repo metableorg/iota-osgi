@@ -131,7 +131,7 @@ public class Example {
 
     public static String[] generateAddresses(final String seed) {
         Client iota = node();
-        String[] addresses = new GetAddressesBuilder(seed).withClient(iota).withRange(0, 10).finish();
+        String[] addresses = GetAddressesBuilder.from(seed).withClient(iota).withRange(0, 10).finish();
         return addresses;
     }
 
