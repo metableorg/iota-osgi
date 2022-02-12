@@ -1,5 +1,7 @@
-# iota-java-client
-IOTA Java client sandbox.
+# iota-osgi
+IOTA OSGi
+Build OSGi bundles that expose the IOTA client and wallet APIs.
+
 # Build Java Bindings
 1. Clone https://github.com/iotaledger/iota.rs.git
 2. Use these instructions as a guide [Getting Started with Java](https://wiki.iota.org/iota.rs/libraries/java/getting_started).
