@@ -1,21 +1,34 @@
-defaultTasks 'buildIotaRelease' 
-
 task deleteIota(type: Delete) {
     delete './iota.rs'
 }
 
+task deleteIotaWallet(type: Delete) {
+    delete './wallet.rs'
+}
+
 task cloneIota(type: Exec) {
     dependsOn = [deleteIota]
-    commandLine "git", "clone", "https://github.com/iotaledger/iota.rs.git"
+    commandLine 'git', 'clone', 'https://github.com/iotaledger/iota.rs.git'
+}
+
+task cloneIotaWallet(type: Exec) {
+    dependsOn = [deleteIotaWallet]
+    commandLine 'git', 'clone', 'https://github.com/iotaledger/wallet.rs'
 }
 
 task buildIotaNativeJar(type: GradleBuild) {
     dependsOn = [cloneIota]
     dir = './iota.rs/bindings/java'
-    tasks = ['build']
+    tasks = ['jar']
 }
 
-task buildIotaRelease(type: Exec) {
+task buildIotaWallet(type: GradleBuild) {
+    dependsOn = [cloneIotaWallet]
+    dir = './wallet.rs/bindings/java'
+    tasks = ['jar']
+}
+
+task buildIota(type: Exec) {
     dependsOn = [buildIotaNativeJar]
     workingDir "./iota.rs/bindings/java"
     commandLine 'cargo', 'build', '--release'
@@ -29,4 +42,22 @@ task copyIotaNativeJar(type: Copy) {
 task copyIotaRelease(type: Copy) {
     from './iota.rs/bindings/java/target/release/iota_client.dll'
     into '../bundles/org.metable.iota.client.library.win32.x86_64'
+}
+
+task copyIotaWalletNativeJar(type: Copy) {
+    from './wallet.rs/bindings/java/native/build/libs/native.jar'
+    into '../bundles/org.metable.iota.wallet.library'
+}
+
+task copyIotaWalletRelease(type: Copy) {
+    from './wallet.rs/bindings/java/native/target/release/iota_wallet_java.dll'
+    into '../bundles/org.metable.iota.wallet.library.win32.x86_64'
+}
+
+task copyIota {
+    dependsOn = [copyIotaNativeJar, copyIotaRelease]
+}
+
+task copyIotaWallet {
+    dependsOn = [copyIotaWalletNativeJar, copyIotaWalletRelease]
 }
