@@ -1,2 +1,3 @@
 /.gradle/
 /iota.rs/
+!/gradle/wrapper/gradle-wrapper.jar
