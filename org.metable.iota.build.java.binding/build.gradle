@@ -1,0 +1,32 @@
+defaultTasks 'buildIotaRelease' 
+
+task deleteIota(type: Delete) {
+    delete './iota.rs'
+}
+
+task cloneIota(type: Exec) {
+    dependsOn = [deleteIota]
+    commandLine "git", "clone", "https://github.com/iotaledger/iota.rs.git"
+}
+
+task buildIotaNativeJar(type: GradleBuild) {
+    dependsOn = [cloneIota]
+    dir = './iota.rs/bindings/java'
+    tasks = ['build']
+}
+
+task buildIotaRelease(type: Exec) {
+    dependsOn = [buildIotaNativeJar]
+    workingDir "./iota.rs/bindings/java"
+    commandLine 'cargo', 'build', '--release'
+}
+
+task copyIotaNativeJar(type: Copy) {
+    from './iota.rs/bindings/java/native/build/libs/native.jar'
+    into '../bundles/org.metable.iota.client.library'
+}
+
+task copyIotaRelease(type: Copy) {
+    from './iota.rs/bindings/java/target/release/iota_client.dll'
+    into '../bundles/org.metable.iota.client.library.win32.x86_64'
+}
