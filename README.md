@@ -1,8 +1,13 @@
 # iota-osgi
 Build OSGi bundles that export the IOTA client and wallet APIs.
 
-# Build Java Bindings
-1. Clone https://github.com/iotaledger/iota.rs.git
-2. Use these instructions as a guide [Getting Started with Java](https://wiki.iota.org/iota.rs/libraries/java/getting_started).
-3. Go to the /path/to/iota.rs/bindings/java/ directory and perform a gradle build i.e., enter "gradle build". This builds the .jar file that contains the java binding to the native iota-client library.
-4. Go to the /path/to/iota.rs/bindings/java/ directory and perform "cargo build --release" to build the native library (i.e., .dll for windows .so for linux).
+Eclipse IDE and Windows platform currently supported.
+
+# Instructions
+1. Clone this repository.
+2. Go to the `org.metable.iota.build.java.binding` directory.
+3. `gradlew buildIota` builds the IOTA client Java binding libraries from source.
+4. `gradlew copyIota` copies the `native.jar` and `iota_client.dll` files to the `org.metable.iota.client.library` bundle project and `org.metable.client.library.wint32_x86_64` bundle fragment project, respectively.
+3. `gradlew buildIotaWallet` builds the IOTA wallet Java binding libraries from source.
+4. `gradlew copyIotaWallet` copies the `native.jar` and `iota_wallet_java.dll` files to the `org.metable.iota.wallet.library` bundle project and `org.metable.wallet.library.wint32_x86_64` bundle fragment project, respectively.
+5. Import the bundle and fragment projects into your workspace.
