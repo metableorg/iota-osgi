@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: org.metable.iota.client.library.tests
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.metable.iota.client.library;bundle-version="1.0.0"
+Automatic-Module-Name: org.metable.iota.client.library.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.junit;bundle-version="4.0.0"
