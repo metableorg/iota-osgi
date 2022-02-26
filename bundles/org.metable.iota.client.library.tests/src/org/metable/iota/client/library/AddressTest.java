@@ -38,8 +38,7 @@ public class AddressTest {
         // Act.
         BalanceAddressResponse response = iota.getAddress().balance(address);
 
-        // Assert. If this fails, request tokens for the address from the faucet:
-        // https://faucet.chrysalis-devnet.iota.cafe/
+        // Assert. If this fails, request tokens for the token faucet here: https://faucet.chrysalis-devnet.iota.cafe/
         Assert.assertEquals(100_000_000, response.balance());
     }
 }
